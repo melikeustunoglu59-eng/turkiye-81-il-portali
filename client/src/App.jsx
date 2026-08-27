@@ -341,6 +341,7 @@ function App() {
   const [geoDuzey1Data, setGeoDuzey1Data] = useState(null);
   // YÖNETİCİ PANELİ
   const [adminModu, setAdminModu] = useState(false);
+  const [mobilMenuAcik, setMobilMenuAcik] = useState(false);
   const [adminToken, setAdminToken] = useState(() => {
     try {
       return sessionStorage.getItem("adminToken") || "";
@@ -2615,21 +2616,111 @@ const data = await adminIstek(
           html, body {
             overflow-x: hidden;
           }
+
+          .mobil-menu-button {
+            display: none;
+          }
+
+          @media (max-width: 768px) {
+            .mobil-menu-button {
+              display: flex !important;
+              position: fixed !important;
+              top: 14px !important;
+              left: 14px !important;
+              width: 42px !important;
+              height: 42px !important;
+              align-items: center !important;
+              justify-content: center !important;
+              border: 0 !important;
+              border-radius: 10px !important;
+              background: #072b4e !important;
+              color: white !important;
+              font-size: 23px !important;
+              line-height: 1 !important;
+              cursor: pointer !important;
+              z-index: 1300 !important;
+              box-shadow: 0 3px 12px rgba(0,0,0,0.16) !important;
+            }
+
+            .mobil-menu-overlay {
+              position: fixed !important;
+              inset: 0 !important;
+              background: rgba(0,0,0,0.28) !important;
+              opacity: 0;
+              pointer-events: none;
+              transition: opacity 0.2s ease;
+              z-index: 1090 !important;
+            }
+
+            .mobil-menu-overlay.acik {
+              opacity: 1;
+              pointer-events: auto;
+            }
+
+            .veri-panel-sidebar {
+              position: fixed !important;
+              left: 0 !important;
+              top: 0 !important;
+              width: 280px !important;
+              min-width: 280px !important;
+              height: 100vh !important;
+              transform: translateX(-105%);
+              transition: transform 0.24s ease;
+              overflow-y: auto !important;
+              z-index: 1200 !important;
+            }
+
+            .veri-panel-sidebar.mobil-acik {
+              transform: translateX(0);
+            }
+
+            .admin-main-mobile {
+              width: 100% !important;
+              padding: 70px 16px 20px !important;
+              box-sizing: border-box !important;
+            }
+
+            .admin-main-mobile form > div {
+              grid-template-columns: 1fr !important;
+            }
+
+            .admin-main-mobile form > div > div {
+              grid-column: span 1 !important;
+            }
+
+            .admin-main-mobile {
+              overflow-x: hidden !important;
+            }
+          }
         `}</style>
-        <aside className="veri-panel-sidebar" style={{ width: "249px", minWidth: "249px", height: "100vh", position: "sticky", top: 0, backgroundColor: "#072b4e", color: "white", display: "flex", flexDirection: "column", boxSizing: "border-box", zIndex: 1100 }}>
+        <button
+          className="mobil-menu-button"
+          type="button"
+          aria-label="Menüyü aç/kapat"
+          onClick={() => setMobilMenuAcik(v => !v)}
+        >
+          {mobilMenuAcik ? "×" : "☰"}
+        </button>
+
+        <div
+          className={`mobil-menu-overlay ${mobilMenuAcik ? "acik" : ""}`}
+          onClick={() => setMobilMenuAcik(false)}
+        />
+
+        <aside className={`veri-panel-sidebar ${mobilMenuAcik ? "mobil-acik" : ""}`} style={{ width: "249px", minWidth: "249px", height: "100vh", position: "sticky", top: 0, backgroundColor: "#072b4e", color: "white", display: "flex", flexDirection: "column", boxSizing: "border-box", zIndex: 1100 }}>
           <div style={{ padding: "30px 18px 27px", textAlign: "center", borderBottom: "1px solid rgba(255,255,255,0.18)" }}>
             <div style={{ fontSize: "18px", lineHeight: "1.35", fontWeight: "700" }}>Trakya Kalkınma Ajansı</div>
             <div style={{ fontSize: "18px", lineHeight: "1.35", fontWeight: "700" }}>Türkiye Veri Analizleri</div>
           </div>
           <div style={{ padding: "18px 18px 0" }}>
-            <button type="button" onClick={() => setAdminModu(false)} style={{ width: "100%", border: "none", background: "transparent", color: "white", textAlign: "left", padding: "14px 0", fontSize: "14px", fontWeight: "500", cursor: "pointer" }}>← Siteye Dön</button>
+            <button type="button" onClick={() => { setAdminModu(false); setMobilMenuAcik(false); }} style={{ width: "100%", border: "none", background: "transparent", color: "white", textAlign: "left", padding: "14px 0", fontSize: "14px", fontWeight: "500", cursor: "pointer" }}>← Siteye Dön</button>
           </div>
           <div style={{ marginTop: "auto", borderTop: "1px solid rgba(255,255,255,0.14)" }}>
             {adminToken && <button type="button" onClick={adminCikisYap} style={{ width: "100%", border: "none", background: "transparent", color: "white", textAlign: "left", padding: "18px", fontSize: "14px", fontWeight: "600", cursor: "pointer" }}>Çıkış Yap</button>}
           </div>
         </aside>
 
-        <main style={{ flex: 1, minWidth: 0, padding: "30px", boxSizing: "border-box", overflowY: "auto" }}>
+        <main className="admin-main-mobile" style={{ flex: 1, minWidth: 0, padding: "30px", boxSizing: "border-box", overflowY: "auto" }}>
           {!adminToken ? (
             <div style={{ maxWidth: "460px", margin: "70px auto", background: "white", borderRadius: "12px", padding: "30px", boxShadow: "0 2px 14px rgba(0,0,0,0.06)" }}>
               <h1 style={{ margin: "0 0 8px", color: "#326282", fontSize: "24px" }}>Yönetici Girişi</h1>
@@ -2806,7 +2897,21 @@ const data = await adminIstek(
       padding: 0,
       overflowX: "hidden"
     }}>
-      <aside className="veri-panel-sidebar" style={{
+      <button
+        className="mobil-menu-button"
+        type="button"
+        aria-label="Menüyü aç/kapat"
+        onClick={() => setMobilMenuAcik(v => !v)}
+      >
+        {mobilMenuAcik ? "×" : "☰"}
+      </button>
+
+      <div
+        className={`mobil-menu-overlay ${mobilMenuAcik ? "acik" : ""}`}
+        onClick={() => setMobilMenuAcik(false)}
+      />
+
+      <aside className={`veri-panel-sidebar ${mobilMenuAcik ? "mobil-acik" : ""}`} style={{
         width: "249px",
         minWidth: "249px",
         height: "100vh",
@@ -2839,7 +2944,7 @@ const data = await adminIstek(
             <button
               key={item.id}
               type="button"
-              onClick={() => setAktifDuzey(item.id)}
+              onClick={() => { setAktifDuzey(item.id); setMobilMenuAcik(false); }}
               style={{
                 position: "relative",
                 width: "100%",
@@ -2867,7 +2972,7 @@ const data = await adminIstek(
         <div style={{ marginTop: "auto", borderTop: "1px solid rgba(255,255,255,0.14)" }}>
           <button
             type="button"
-            onClick={() => { setAdminModu(true); setAdminHata(""); }}
+            onClick={() => { setAdminModu(true); setAdminHata(""); setMobilMenuAcik(false); }}
             style={{ width: "100%", border: "none", background: adminModu ? "#204160" : "transparent", color: "white", textAlign: "left", padding: "18px", fontSize: "14px", fontWeight: "600", cursor: "pointer" }}
           >
             Yönetici Girişi
@@ -2875,7 +2980,7 @@ const data = await adminIstek(
         </div>
       </aside>
 
-      <div style={{ flex: 1, minWidth: 0, width: "calc(100% - 249px)", backgroundColor: "#f4f7f6", display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
+      <div className="veri-panel-main" style={{ flex: 1, minWidth: 0, width: "calc(100% - 249px)", backgroundColor: "#f4f7f6", display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
 
       <style>{`
         html, body, #root {
@@ -2918,10 +3023,108 @@ const data = await adminIstek(
           border-radius: 6px;
           box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        @media (max-width: 900px) {
+        .mobil-menu-button {
+          display: none;
+        }
+
+        .mobil-menu-overlay {
+          display: none;
+        }
+
+        @media (max-width: 768px) {
+          .mobil-menu-button {
+            display: flex !important;
+            position: fixed !important;
+            top: 14px !important;
+            left: 14px !important;
+            width: 42px !important;
+            height: 42px !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border: 0 !important;
+            border-radius: 10px !important;
+            background: #072b4e !important;
+            color: white !important;
+            font-size: 23px !important;
+            line-height: 1 !important;
+            cursor: pointer !important;
+            z-index: 1300 !important;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.16) !important;
+          }
+
+          .mobil-menu-overlay {
+            display: block !important;
+            position: fixed !important;
+            inset: 0 !important;
+            background: rgba(0,0,0,0.28) !important;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 1090 !important;
+          }
+
+          .mobil-menu-overlay.acik {
+            opacity: 1;
+            pointer-events: auto;
+          }
+
           .veri-panel-sidebar {
-            width: 210px !important;
-            min-width: 210px !important;
+            position: fixed !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 280px !important;
+            min-width: 280px !important;
+            height: 100vh !important;
+            transform: translateX(-105%);
+            transition: transform 0.24s ease;
+            overflow-y: auto !important;
+            z-index: 1200 !important;
+          }
+
+          .veri-panel-sidebar.mobil-acik {
+            transform: translateX(0);
+          }
+
+          .veri-panel-main {
+            width: 100% !important;
+            padding-top: 70px !important;
+            box-sizing: border-box !important;
+          }
+
+          .analiz-panelleri-grid {
+            grid-template-columns: 1fr !important;
+            grid-template-rows: none !important;
+            min-height: auto !important;
+            padding: 14px !important;
+            gap: 14px !important;
+          }
+
+          .analiz-panelleri-grid > div {
+            min-height: 320px !important;
+            min-width: 0 !important;
+          }
+
+          .analiz-panelleri-grid .recharts-responsive-container {
+            min-width: 0 !important;
+          }
+
+          .veri-panel-main header {
+            padding: 15px 16px !important;
+          }
+
+          .veri-panel-main header h1 {
+            font-size: 19px !important;
+            padding-left: 54px !important;
+          }
+
+          .veri-panel-main > div {
+            min-width: 0 !important;
+          }
+
+          .veri-panel-main select,
+          .veri-panel-main input,
+          .veri-panel-main button {
+            max-width: 100% !important;
           }
         }
       `}</style>
@@ -3094,7 +3297,7 @@ const data = await adminIstek(
 
 
 
-          <div style={{
+          <div className="analiz-panelleri-grid" style={{
             flex: 1,
             width: "100%",
             padding: "20px",
@@ -3526,7 +3729,7 @@ const data = await adminIstek(
 
 
 
-          <div style={{
+          <div className="analiz-panelleri-grid" style={{
             flex: 1,
             width: "100%",
             padding: "20px",
@@ -3890,7 +4093,7 @@ const data = await adminIstek(
 
 
 
-          <div style={{ flex: 1, width: "100%", padding: "20px", boxSizing: "border-box", display: "grid", gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr", gap: "20px", minHeight: "75vh" }}>
+          <div className="analiz-panelleri-grid" style={{ flex: 1, width: "100%", padding: "20px", boxSizing: "border-box", display: "grid", gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr", gap: "20px", minHeight: "75vh" }}>
             <div style={{ backgroundColor: "white", borderRadius: "10px", padding: "20px", boxShadow: "0 2px 10px rgba(0,0,0,0.05)", display: "flex", flexDirection: "column" }}>
               <h3 style={{ margin: "0 0 12px 0", color: "#343a40", fontSize: "16px", borderBottom: "1px solid #eee", paddingBottom: "10px", textAlign: "left" }}>
                 {turkceGoster(seciliVeri)}
