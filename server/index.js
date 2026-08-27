@@ -1,5 +1,5 @@
 require('dotenv').config({
-    path: '../.env',
+    path: require('path').join(__dirname, '../.env'),
     override: true
 });
 
@@ -30,12 +30,20 @@ const excelUpload = multer({
 });
 
 const pool = process.env.DATABASE_URL
-    ? new Pool({
-        connectionString: process.env.DATABASE_URL,
-        ssl: {
-            rejectUnauthorized: false
-        }
-    })
+    ? (() => {
+        const dbUrl = new URL(process.env.DATABASE_URL);
+
+        return new Pool({
+            user: dbUrl.username,
+            host: dbUrl.hostname,
+            port: Number(dbUrl.port || 5432),
+            database: dbUrl.pathname.replace(/^\//, ''),
+            password: dbUrl.password,
+            ssl: {
+                rejectUnauthorized: false
+            }
+        });
+    })()
     : new Pool({
         user: process.env.DB_USER || 'postgres',
         host: process.env.DB_HOST || 'localhost',
@@ -43,7 +51,7 @@ const pool = process.env.DATABASE_URL
         password: process.env.DB_PASSWORD || '',
         port: Number(process.env.DB_PORT || 5432),
     });
-
+    
 // -----------------------------------------------------
 // YÖNETİCİ AYARLARI
 // -----------------------------------------------------
@@ -1495,7 +1503,7 @@ app.post(
 // SUNUCU
 // -----------------------------------------------------
 
-const PORT = 5000;
+const PORT = Number(process.env.PORT || 5000);
 
 app.listen(
     PORT,
