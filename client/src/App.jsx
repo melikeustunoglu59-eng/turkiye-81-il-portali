@@ -2943,6 +2943,29 @@ const data = await adminIstek(
         }
 
         @media (max-width: 768px) {
+
+          .mobil-veri-satiri {
+            width: 100% !important;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 10px !important;
+            box-sizing: border-box !important;
+          }
+
+          .mobil-veri-satiri label {
+            flex: 0 0 45px !important;
+            margin: 0 !important;
+          }
+
+          .mobil-veri-satiri select {
+            flex: 1 1 auto !important;
+            width: auto !important;
+            min-width: 0 !important;
+          }
+
+
           .mobil-menu-button {
             display: flex !important;
             position: fixed !important;
@@ -3116,7 +3139,7 @@ const data = await adminIstek(
             width: "100%",
             boxSizing: "border-box"
           }}>
-            <div className="mobil-filtreler" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="mobil-veri-satiri" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <label style={{ fontSize: "13px", fontWeight: "600", color: "#495057" }}>Veri:</label>
               <select
                 value={seciliVeri}
@@ -3137,7 +3160,7 @@ const data = await adminIstek(
               </select>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="mobil-veri-satiri" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <label style={{ fontSize: "13px", fontWeight: "600", color: "#495057" }}>Yıl:</label>
               <select
                 value={seciliYil}
@@ -3548,7 +3571,7 @@ const data = await adminIstek(
             width: "100%",
             boxSizing: "border-box"
           }}>
-            <div className="mobil-filtreler" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="mobil-veri-satiri" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <label style={{ fontSize: "13px", fontWeight: "600", color: "#495057" }}>Veri:</label>
               <select
                 value={seciliVeri}
@@ -3569,7 +3592,7 @@ const data = await adminIstek(
               </select>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="mobil-veri-satiri" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <label style={{ fontSize: "13px", fontWeight: "600", color: "#495057" }}>Yıl:</label>
               <select
                 value={seciliYil}
@@ -3941,13 +3964,13 @@ const data = await adminIstek(
             width: "100%",
             boxSizing: "border-box"
           }}>
-            <div className="mobil-filtreler" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="mobil-veri-satiri" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <label style={{ fontSize: "13px", fontWeight: "600", color: "#495057" }}>Veri:</label>
               <select value={seciliVeri} onChange={(e) => setSeciliVeri(e.target.value)} style={{ padding: "6px 12px", borderRadius: "4px", border: "1px solid #ced4da", fontSize: "13px", backgroundColor: "#fff", cursor: "pointer", minWidth: "250px" }}>
                 {veriListesi.map((v, index) => <option key={`d1-veri-${v}-${index}`} value={v}>{turkceGoster(v)}</option>)}
               </select>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="mobil-veri-satiri" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <label style={{ fontSize: "13px", fontWeight: "600", color: "#495057" }}>Yıl:</label>
               <select value={seciliYil} onChange={(e) => setSeciliYil(e.target.value)} style={{ padding: "6px 12px", borderRadius: "4px", border: "1px solid #ced4da", fontSize: "13px", backgroundColor: "#fff", cursor: "pointer", minWidth: "100px" }}>
                 {yilListesi.map((y, index) => <option key={`d1-yil-${y}-${index}`} value={y}>{y}</option>)}
