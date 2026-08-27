@@ -3116,7 +3116,7 @@ const data = await adminIstek(
             width: "100%",
             boxSizing: "border-box"
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="mobil-filtreler" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <label style={{ fontSize: "13px", fontWeight: "600", color: "#495057" }}>Veri:</label>
               <select
                 value={seciliVeri}
@@ -3548,7 +3548,7 @@ const data = await adminIstek(
             width: "100%",
             boxSizing: "border-box"
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="mobil-filtreler" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <label style={{ fontSize: "13px", fontWeight: "600", color: "#495057" }}>Veri:</label>
               <select
                 value={seciliVeri}
@@ -3941,7 +3941,7 @@ const data = await adminIstek(
             width: "100%",
             boxSizing: "border-box"
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="mobil-filtreler" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <label style={{ fontSize: "13px", fontWeight: "600", color: "#495057" }}>Veri:</label>
               <select value={seciliVeri} onChange={(e) => setSeciliVeri(e.target.value)} style={{ padding: "6px 12px", borderRadius: "4px", border: "1px solid #ced4da", fontSize: "13px", backgroundColor: "#fff", cursor: "pointer", minWidth: "250px" }}>
                 {veriListesi.map((v, index) => <option key={`d1-veri-${v}-${index}`} value={v}>{turkceGoster(v)}</option>)}
