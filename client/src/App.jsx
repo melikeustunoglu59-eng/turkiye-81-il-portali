@@ -13,6 +13,7 @@ import {
   Treemap
 } from 'recharts';
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const harfTemizle = (metin) => {
   if (!metin) return "";
 
@@ -420,7 +421,7 @@ function App() {
         console.error("İBBS Düzey 2 haritası yüklenemedi.");
       });
 
-axios.get('http://localhost:5000/api/veri-metadata')
+axios.get(`${API_URL}/api/veri-metadata`)
   .then(res => {
     const temizMetadata = res.data.map(item => ({
       orjinalKategori: item.kategori, // Veritabanındaki orijinal bozuk/boşluklu hali saklıyoruz
@@ -552,7 +553,7 @@ axios.get('http://localhost:5000/api/veri-metadata')
       yil: String(seciliMetadata.yil)
     });
 
-    axios.get(`http://localhost:5000/api/veriler?${params.toString()}`)
+    axios.get(`${API_URL}/api/veriler?${params.toString()}`)
       .then(res => {
         const temizVeriler = res.data.map(item => ({
           ...item,
@@ -2431,7 +2432,7 @@ axios.get('http://localhost:5000/api/veri-metadata')
     setAdminYukleniyor(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/admin/login", {
+   const response = await fetch(`${API_URL}/api/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(adminGiris)
@@ -2468,7 +2469,7 @@ axios.get('http://localhost:5000/api/veri-metadata')
       setAdminYukleniyor(true);
       setAdminHata("");
       const q = adminArama.trim() ? `?arama=${encodeURIComponent(adminArama.trim())}` : "";
-      const data = await adminIstek(`http://localhost:5000/api/admin/veriler${q}`);
+    const data = await adminIstek(`${API_URL}/api/admin/veriler${q}`);
       setAdminVeriler(Array.isArray(data) ? data : []);
     } catch (err) {
       if (err.message !== "UNAUTHORIZED") {
@@ -2527,10 +2528,9 @@ axios.get('http://localhost:5000/api/veri-metadata')
 
     try {
       const method = adminDuzenlenenId ? "PUT" : "POST";
-      const url = adminDuzenlenenId
-        ? `http://localhost:5000/api/admin/veriler/${adminDuzenlenenId}`
-        : "http://localhost:5000/api/admin/veriler";
-
+const url = adminDuzenlenenId
+  ? `${API_URL}/api/admin/veriler/${adminDuzenlenenId}`
+  : `${API_URL}/api/admin/veriler`;
       await adminIstek(url, { method, body: JSON.stringify(payload) });
       adminFormuTemizle();
       await adminVerileriGetir();
@@ -2561,11 +2561,10 @@ axios.get('http://localhost:5000/api/veri-metadata')
       setAdminExcelDurum("");
       setAdminHata("");
 
-      const data = await adminIstek(
-        "http://localhost:5000/api/admin/excel-yukle",
-        { method: "POST", body: formData }
-      );
-
+const data = await adminIstek(
+  `${API_URL}/api/admin/excel-yukle`,
+  { method: "POST", body: formData }
+);
       setAdminExcelDurum(
         `Excel tamamlandı: ${data.guncellenen || 0} kayıt güncellendi, ${data.eklenen || 0} yeni kayıt eklendi${data.atlanan ? `, ${data.atlanan} satır atlandı` : ""}.`
       );
@@ -2591,7 +2590,7 @@ axios.get('http://localhost:5000/api/veri-metadata')
     try {
       setAdminYukleniyor(true);
       setAdminHata("");
-      await adminIstek(`http://localhost:5000/api/admin/veriler/${id}`, { method: "DELETE" });
+      await adminIstek(`${API_URL}/api/admin/veriler/${id}`, { method: "DELETE" });
       if (adminDuzenlenenId === id) adminFormuTemizle();
       await adminVerileriGetir();
     } catch (err) {
